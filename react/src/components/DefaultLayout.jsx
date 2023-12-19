@@ -1,11 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  UserIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import { NavLink, Outlet } from "react-router-dom";
+import { Bars3Icon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { NavLink, Navigate, Outlet } from "react-router-dom";
 import { userStateContext } from "../contexts/ContextProvider";
 
 const navigation = [
@@ -18,7 +14,11 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
-  const { currentUser } = userStateContext();
+  const { currentUser, userToken } = userStateContext();
+
+  if (!userToken) {
+    return <Navigate to="login" />;
+  }
 
   const logout = (ev) => {
     ev.preventDefault();
@@ -70,7 +70,7 @@ export default function DefaultLayout() {
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <UserIcon className="w-8 h-8 bg-black/25 p-2 rounded-full text-white"/>
+                            <UserIcon className="w-8 h-8 bg-black/25 p-2 rounded-full text-white" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -82,7 +82,7 @@ export default function DefaultLayout() {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md ps-4 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <Menu.Item>
                               <a
                                 href="#"
