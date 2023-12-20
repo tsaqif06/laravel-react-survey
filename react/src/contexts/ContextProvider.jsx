@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 const StateContext = createContext({
   currentUser: {},
   userToken: null,
+  surveys: [],
   setCurrentUser: () => {},
   setUserToken: () => {},
 });
@@ -10,7 +11,7 @@ const StateContext = createContext({
 const tmpSurveys = [
     {
       id: 1,
-      image_url: "https://api.yoursurveys.xyz/images/vJutXzn02CDwdOyh.png",
+      image_url: "https://picsum.photos/750",
       title: "TheCodeholic YouTube channel",
       slug: "thecodeholic-youtube-channel",
       status: true,
@@ -158,7 +159,7 @@ const tmpSurveys = [
     },
     {
       id: 2,
-      image_url: "https://api.yoursurveys.xyz/images/gjIHElz4aKrL0nT0.png",
+      image_url: "https://picsum.photos/800",
       title: "React",
       slug: "react",
       status: true,
@@ -171,7 +172,7 @@ const tmpSurveys = [
     },
     {
       id: 3,
-      image_url: "https://api.yoursurveys.xyz/images/WPfzo0g66huUYYwR.png",
+      image_url: "https://picsum.photos/700",
       title: "Laravel 9",
       slug: "laravel-9",
       status: true,
@@ -192,6 +193,7 @@ export const ContextProvider = ({ children }) => {
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   });
   const [userToken, setUserToken] = useState("1234");
+  const [surveys, setSurveys] = useState(tmpSurveys);
 
   return (
     <StateContext.Provider
@@ -200,6 +202,7 @@ export const ContextProvider = ({ children }) => {
         setCurrentUser,
         userToken,
         setUserToken,
+        surveys,
       }}
     >
       {children}
