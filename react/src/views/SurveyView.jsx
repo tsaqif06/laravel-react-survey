@@ -15,6 +15,15 @@ export default function SurveyView() {
     questions: [],
   });
 
+  const onImageChoose = () => {
+    console.log("onImageChoose");
+  };
+
+  const onSubmit = (ev) => {
+    ev.preventDefault();
+    console.log(ev);
+  };
+
   return (
     <PageComponent title="Create new Survey">
       <form action="#" method="POST" onSubmit={onSubmit}>
