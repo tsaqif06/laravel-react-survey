@@ -2,10 +2,10 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import PageComponent from "../components/PageComponent";
 import SurveyListItem from "../components/SurveyListItem";
 import TButton from "../components/core/TButton";
-import { userStateContext } from "../contexts/ContextProvider";
+import { useStateContext } from "../contexts/ContextProvider";
 
 export default function Surveys() {
-  const { surveys } = userStateContext();
+  const { surveys } = useStateContext();
 
   const onDeleteClick = () => {
     console.log("On Delete Click");
