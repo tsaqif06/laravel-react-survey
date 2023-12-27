@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignupRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -50,5 +51,13 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
+        /** @var User $user */
+        $user = Auth::user();
+        $user->currentAccessToken()->delete();
+
+
+        return response([
+            'success' => true,
+        ]);
     }
 }
