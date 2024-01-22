@@ -5,19 +5,19 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-  const token = "123"; //TODO
-  config.headers.Authorization = `Bearer ${token}`;
-  
+  config.headers.Authorization = `Bearer ${localStorage.getItem("TOKEN")}`;
+
   return config;
 });
 
 axiosClient.interceptors.response.use(
-  (resp) => {
-    return resp;
+  (response) => {
+    return response;
   },
   (error) => {
-    if (error.resp && error.resp.status === 401) {
-      router.navigate("/login");
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("TOKEN");
+      window.location.reload();
       return error;
     }
     throw error;
