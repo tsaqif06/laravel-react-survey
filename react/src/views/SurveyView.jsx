@@ -2,6 +2,7 @@ import { PhotoIcon } from "@heroicons/react/24/outline";
 import PageComponent from "../components/PageComponent";
 import { useState } from "react";
 import TButton from "../components/core/TButton";
+import axiosClient from "../axios.js";
 
 export default function SurveyView() {
   const [survey, setSurvey] = useState({
@@ -21,7 +22,14 @@ export default function SurveyView() {
 
   const onSubmit = (ev) => {
     ev.preventDefault();
-    console.log(ev);
+
+    axiosClient.post("/survey", {
+      title: "Lorem Ipsum",
+      description: "Test",
+      expire_date: "2024-02-08 11:15:52",
+      status: true,
+      questions: [],
+    });
   };
 
   return (
@@ -98,7 +106,7 @@ export default function SurveyView() {
                 id="description"
                 value={survey.description}
                 onChange={(ev) =>
-                  setSurvey({ ...survey, title: ev.target.value })
+                  setSurvey({ ...survey, description: ev.target.value })
                 }
                 placeholder="Describe your survey"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-50 focus:ring-indigo-500 sm:text-sm"
@@ -120,7 +128,7 @@ export default function SurveyView() {
                 id="expire_date"
                 value={survey.expire_date}
                 onChange={(ev) =>
-                  setSurvey({ ...survey, title: ev.target.value })
+                  setSurvey({ ...survey, expire_date: ev.target.value })
                 }
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-50 focus:ring-indigo-500 sm:text-sm"
               />
@@ -136,7 +144,7 @@ export default function SurveyView() {
                   type="checkbox"
                   checked={survey.status}
                   onChange={(ev) =>
-                    setSurvey({ ...survey, title: ev.target.value })
+                    setSurvey({ ...survey, status: ev.target.value })
                   }
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                 />
