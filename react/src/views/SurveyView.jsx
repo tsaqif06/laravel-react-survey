@@ -3,8 +3,11 @@ import PageComponent from "../components/PageComponent";
 import { useState } from "react";
 import TButton from "../components/core/TButton";
 import axiosClient from "../axios.js";
+import { useNavigate } from "react-router-dom";
 
 export default function SurveyView() {
+  const navigate = useNavigate();
+
   const [survey, setSurvey] = useState({
     title: "",
     slug: "",
@@ -16,20 +19,48 @@ export default function SurveyView() {
     questions: [],
   });
 
-  const onImageChoose = () => {
-    console.log("onImageChoose");
+  const [error, setError] = useState("");
+
+  const onImageChoose = (ev) => {
+    const file = ev.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setSurvey({
+        ...survey,
+        image: file,
+        image_url: reader.result,
+      });
+
+      ev.target.value = "";
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const onSubmit = (ev) => {
     ev.preventDefault();
 
-    axiosClient.post("/survey", {
-      title: "Lorem Ipsum",
-      description: "Test",
-      expire_date: "2024-02-08 11:15:52",
-      status: true,
-      questions: [],
-    });
+    const payload = { ...survey };
+
+    if (payload.image) {
+      payload.image = payload.image_url;
+    }
+
+    delete payload.image_url;
+
+    axiosClient
+      .post("/survey", payload)
+      .then((res) => {
+        console.log(res);
+        navigate("/surveys");
+      })
+      .catch((err) => {
+        if (err && err.response) {
+          setError(err.response.data.message);
+        }
+        console.error(err, err.response);
+      });
   };
 
   return (
@@ -37,6 +68,11 @@ export default function SurveyView() {
       <form action="#" method="POST" onSubmit={onSubmit}>
         <div className="shadow sm:overflow-hidden sm:rounded-md">
           <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+            {error && (
+              <div className="bg-red-500 text-white py-3 px-3 rounded-lg">
+                {error}
+              </div>
+            )}
             {/* Image */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -45,7 +81,7 @@ export default function SurveyView() {
               <div className="mt-1 flex items-center">
                 {survey.image_url && (
                   <img
-                    src="survey.image_url"
+                    src={survey.image_url}
                     alt=""
                     className="w-32 h-32 object-cover"
                   />
