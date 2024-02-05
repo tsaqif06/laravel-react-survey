@@ -7,18 +7,20 @@ import QuestionEditor from "./QuestionEditor";
 export default function SurveyQuestions({ survey, onSurveyUpdate }) {
   const [model, setModel] = useState({ ...survey  });
 
-  const addQuestion = () => {
+  const addQuestion = (index) => {
+    index = index !== undefined ? index : model.questions.length - 1;
+    debugger;
+    model.questions.splice(index, 0, {
+      id: uuidv4(),
+      type: "text",
+      question: "",
+      description: "",
+      data: {},
+    })
     setModel({
       ...model,
       questions: [
         ...model.questions,
-        {
-          id: uuidv4(),
-          type: "text",
-          question: "",
-          description: "",
-          data: {},
-        },
       ],
     });
   };
@@ -56,7 +58,7 @@ export default function SurveyQuestions({ survey, onSurveyUpdate }) {
         <button
           type="button"
           className="flex items-center text-sm py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700"
-          onClick={addQuestion}
+          onClick={() => addQuestion()}
         >
           <PlusIcon className="w-4 mr-2" />
           Add question
