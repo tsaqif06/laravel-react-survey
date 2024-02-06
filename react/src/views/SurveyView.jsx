@@ -1,10 +1,12 @@
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import PageComponent from "../components/PageComponent";
+import { useEffect } from "react";
 import { useState } from "react";
 import TButton from "../components/core/TButton";
 import axiosClient from "../axios.js";
 import { useNavigate } from "react-router-dom";
 import SurveyQuestions from "../components/SurveyQuestions";
+import { v4 as uuidv4 } from "uuid";
 
 export default function SurveyView() {
   const navigate = useNavigate();
@@ -64,7 +66,21 @@ export default function SurveyView() {
       });
   };
 
-  const onSurveyUpdate = (survey) => {
+  const onQuestionsUpdate = (questions) => {
+    setSurvey({
+      ...survey,
+      questions,
+    });
+  };
+
+  const addQuestion = () => {
+    survey.questions.push({
+      id: uuidv4(),
+      type: "text",
+      question: "",
+      description: "",
+      data: {},
+    })
     setSurvey({ ...survey })
   };
 
@@ -185,23 +201,27 @@ export default function SurveyView() {
                   type="checkbox"
                   checked={survey.status}
                   onChange={(ev) =>
-                    setSurvey({ ...survey, status: ev.target.value })
+                    setSurvey({ ...survey, status: ev.target.checked })
                   }
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                 />
               </div>
-            </div>
-            <div className="ml-3 text-sm">
-              <label htmlFor="commets" className="font-medium text-gray-700">
-                Active
-              </label>
-              <p className="text-gray-500">
-                Whether to make survey publicly available
-              </p>
+              <div className="ml-3 text-sm">
+                <label htmlFor="commets" className="font-medium text-gray-700">
+                  Active
+                </label>
+                <p className="text-gray-500">
+                  Whether to make survey publicly available
+                </p>
+              </div>
             </div>
             {/* Active */}
 
-            <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate}/>
+            <button type="button" onClick={addQuestion}>Add question</button>
+            <SurveyQuestions
+              questions={survey.questions}
+              onQuestionsUpdate={onQuestionsUpdate}
+            />
           </div>
           <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
             <TButton>Save</TButton>
